@@ -1,4 +1,91 @@
-// ==================== 1. INISIALISASI DATABASE LOCALSTORAGE ====================
+let isSignUpMode = false;
+
+document.addEventListener("DOMContentLoaded", function () {
+    const btnSwitchAuth = document.getElementById('btn-switch-auth');
+    const authTitle = document.getElementById('auth-title');
+    const authSubtitle = document.getElementById('auth-subtitle');
+    const btnAuthSubmit = document.getElementById('btn-auth-submit');
+    const authSwitchText = document.getElementById('auth-switch-text');
+    const groupConfirmPassword = document.getElementById('group-confirm-password');
+    const formAuth = document.getElementById('form-auth');
+    const bottomNav = document.querySelector('.bottom-nav');
+
+    navigasi('auth'); 
+    if (bottomNav) bottomNav.classList.add('hidden');
+
+    if (btnSwitchAuth) {
+        btnSwitchAuth.addEventListener('click', function (e) {
+            e.preventDefault();
+            isSignUpMode = !isSignUpMode;
+
+            if (isSignUpMode) {
+                authTitle.innerText = "SIGN UP";
+                authSubtitle.innerText = "Create your business account to get started.";
+                btnAuthSubmit.innerText = "Sign Up";
+                authSwitchText.innerHTML = `Already have an account? <a href="#" id="btn-switch-auth">Sign In</a>`;
+                groupConfirmPassword.classList.remove('hidden');
+                document.getElementById('auth-confirm-password').setAttribute('required', 'required');
+            } else {
+                authTitle.innerText = "SIGN IN";
+                authSubtitle.innerText = "Welcome back! Please enter your details.";
+                btnAuthSubmit.innerText = "Sign In";
+                authSwitchText.innerHTML = `Don't have an account? <a href="#" id="btn-switch-auth">Sign Up</a>`;
+                groupConfirmPassword.classList.add('hidden');
+                document.getElementById('auth-confirm-password').removeAttribute('required');
+            }
+            
+            document.getElementById('btn-switch-auth').addEventListener('click', arguments.callee);
+        });
+    }
+
+    if (formAuth) {
+        formAuth.addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const email = document.getElementById('auth-email').value;
+            const password = document.getElementById('auth-password').value;
+            const bottomNav = document.querySelector('.bottom-nav');
+
+            if (isSignUpMode) {
+                const confirmPassword = document.getElementById('auth-confirm-password').value;
+
+                if (password !== confirmPassword) {
+                    alert("Password dan Konfirmasi Password tidak cocok!");
+                    return;
+                }
+
+                const userBaru = { email: email, password: password };
+                localStorage.setItem('user_umkm_account', JSON.stringify(userBaru));
+                
+                alert("Registrasi Berhasil! Silakan masuk dengan akun baru Anda.");
+                LolosLogin();
+            } else {
+                const dataUserTerdaftar = JSON.parse(localStorage.getItem('user_umkm_account'));
+
+                if (!dataUserTerdaftar && email === "admin@gmail.com" && password === "admin123") {
+                    LolosLogin();
+                } else if (dataUserTerdaftar && email === dataUserTerdaftar.email && password === dataUserTerdaftar.password) {
+                    LolosLogin();
+                } else {
+                    alert("Email atau Password salah! (Gunakan admin@gmail.com / admin123 jika belum mendaftar)");
+                }
+            }
+        });
+    }
+
+    function LolosLogin() {
+    alert("Berhasil Masuk!");
+    
+    const emailInput = document.getElementById('auth-email').value;
+    sessionStorage.setItem('user_aktif', emailInput);
+    
+    const welcomeBanner = document.querySelector('#page-home .welcome-banner');
+    if (welcomeBanner) welcomeBanner.classList.remove('hidden');
+
+    navigasi('home'); 
+}
+});
+
 let databaseProduk = JSON.parse(localStorage.getItem('produk_umkm'));
 if (!databaseProduk) {
     databaseProduk = [
@@ -10,13 +97,21 @@ if (!databaseProduk) {
 
 let idProdukTerpilih = null; 
 
-// ==================== 2. FUNGSI NAVIGASI HALAMAN SPA ====================
 function navigasi(namaHalaman) {
     const semuaHalaman = document.querySelectorAll('.app-page');
     semuaHalaman.forEach(page => page.classList.add('hidden'));
 
     const targetPage = document.getElementById('page-' + namaHalaman);
     if (targetPage) targetPage.classList.remove('hidden');
+
+    const bottomNav = document.querySelector('.bottom-nav');
+    if (bottomNav) {
+        if (namaHalaman === 'auth') {
+            bottomNav.classList.add('hidden');
+        } else {
+            bottomNav.classList.remove('hidden');
+        }
+    }
 
     const navItems = document.querySelectorAll('.bottom-nav .nav-item');
     navItems.forEach(item => item.classList.remove('active'));
@@ -30,9 +125,23 @@ function navigasi(namaHalaman) {
     if (namaHalaman === 'list') {
         tampilkanDataInventory();
     }
+
+    if (namaHalaman === 'profile') {
+        const userAktif = sessionStorage.getItem('user_aktif'); 
+        
+        if (userAktif) {
+            const usernameClean = userAktif.split('@')[0]; 
+            const namaClean = usernameClean.charAt(0).toUpperCase() + usernameClean.slice(1);
+
+            const txtName = document.getElementById('profile-name');
+            const txtUsername = document.getElementById('profile-username');
+
+            if (txtName) txtName.innerText = namaClean;
+            if (txtUsername) txtUsername.innerText = "@" + usernameClean.toLowerCase();
+        }
+    }
 }
 
-// ==================== 3. FUNGSI RENDER DATA INVENTORY ====================
 function tampilkanDataInventory() {
     const containerProduk = document.querySelector('.products-list');
     if (!containerProduk) return;
@@ -57,7 +166,6 @@ function tampilkanDataInventory() {
     });
 }
 
-// ==================== 4. LOGIKA MODAL (EDIT & HAPUS) ====================
 function bukaModalPilihan(id, nama) {
     idProdukTerpilih = id;
     document.getElementById('pilihan-judul-produk').innerText = nama;
@@ -98,13 +206,11 @@ function tutupModal() {
     const form = document.getElementById('form-produk');
     if (modal) modal.classList.add('hidden');
     if (form) form.reset();
-    idProdukTerpilih = null; // <-- SUDAH DI-FIX DI SINI (Bebas typo)
+    idProdukTerpilih = null;
 }
 
-// ==================== 5. LIVE SCANNER (INVENTORY & CART TRANSACTIONS) ====================
 document.addEventListener("DOMContentLoaded", function () {
     
-    // --- SCANNER 1: HALAMAN INVENTORY ---
     const scanBanner = document.getElementById('scan-trigger');
     const bannerContent = document.getElementById('banner-status-content');
     const cameraPreview = document.getElementById('camera-preview');
@@ -141,7 +247,6 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // --- SCANNER 2: HALAMAN CART / TRANSACTIONS ---
     const scanCartTrigger = document.getElementById('scan-cart-trigger');
     const cartBannerContent = document.getElementById('cart-banner-content');
     const cameraCartPreview = document.getElementById('camera-cart-preview');
@@ -185,8 +290,8 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
-// ==================== 6. EKSEKUSI UTAMA (WINDOW ONLOAD) ====================
 window.onload = function() {
+    navigasi('auth');
     tampilkanDataInventory();
     
     const formProduk = document.getElementById('form-produk');
@@ -213,7 +318,7 @@ window.onload = function() {
             localStorage.setItem('produk_umkm', JSON.stringify(databaseProduk));
             
             tutupModal();
-            alert("🎉 Produk berhasil disimpan!");
+            alert("Produk berhasil disimpan!");
             navigasi('list');
         });
     }
