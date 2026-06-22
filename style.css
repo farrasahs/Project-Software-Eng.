@@ -1,4 +1,3 @@
-/* Reset basic styling */
 * {
     margin: 0;
     padding: 0;
@@ -13,80 +12,68 @@ body {
     padding: 20px;
 }
 
-/* --- 1. KUNCI CONTAINER UTAMA --- */
 body {
     margin: 0;
     padding: 0;
-    overflow: hidden; /* Mencegah layar browser utama melar ke bawah */
+    overflow: hidden;
     background-color: #f5f5f5; 
 }
 
-/* ==================== PERBAIKAN TOTAL SAKTI LOCK SCROLL ==================== */
-
 body {
     margin: 0;
     padding: 0;
-    overflow: hidden; /* Mutlak mengunci layar browser utama */
+    overflow: hidden;
     background-color: #f5f5f5;
 }
-
-/* ==================== RACIKAN SAKTI FIXED SCREEN LAYOUT ==================== */
 
 html, body {
     width: 100%;
     height: 100%;
     margin: 0;
     padding: 0;
-    overflow: hidden; /* Mengunci total layar browser utama agar tidak bounce */
+    overflow: hidden; 
     background-color: #333;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-/* Container utama bertindak sebagai jangkar flex vertikal */
 .app-container {
     width: 100%;
     max-width: 450px;
-    height: 100vh;          /* Mengunci tinggi pas satu layar penuh */
+    height: 100vh;        
     margin: 0 auto;
     position: relative;
     background: #ffffff;
     display: flex;
-    flex-direction: column; /* Menyusun konten atas dan nav bawah secara vertikal */
+    flex-direction: column;
     overflow: hidden;
 }
 
-/* Format Halaman SPA: Mengisi sisa ruang kosong secara otomatis */
 .app-page {
     width: 100%;
-    flex: 1;                /* OTOMATIS mengambil sisa layar di atas bottom-nav */
+    flex: 1;                
     display: flex !important;
-    flex-direction: column; /* Menyusun elemen di dalam page dari atas ke bawah */
-    overflow: hidden;       /* Matikan scroll halaman penuh */
-    padding: 0px 0px 75px 0px; /* Padding bawah 75px aman agar konten tidak terpotong nav bawah */
+    flex-direction: column; 
+    overflow: hidden;
+    padding: 0px 0px 75px 0px;
     box-sizing: border-box;
 }
 
-/* Pastikan class hidden berfungsi memotong display flex */
 .app-page.hidden {
     display: none !important;
 }
 
-/* --- KENDALI SCROLL KONTEN SPESIFIK --- */
-
-/* 1. Halaman Inventory: Kepala diam, list barang bebas gulir */
 .inventory-header, .inventory-search, .scan-banner {
-    flex-shrink: 0; /* Mencegah elemen atas menyusut/gepeng */
+    flex-shrink: 0; 
 }
 .products-list {
-    flex: 1;                /* Mengambil sisa ruang yang tersedia di halaman */
-    overflow-y: auto;       /* Mengaktifkan scroll hanya untuk daftar barang */
-    -webkit-overflow-scrolling: touch; /* Scroll smooth di iOS/HP */
+    flex: 1;                
+    overflow-y: auto;       
+    -webkit-overflow-scrolling: touch;
     padding-bottom: 10px;
 }
 
-/* 2. Halaman Cart (Transactions): Area scan diam, list keranjang belanja bebas gulir */
 .welcome-banner, .scan-area-box, .scan-main-section {
     flex-shrink: 0;
 }
@@ -96,13 +83,11 @@ html, body {
     -webkit-overflow-scrolling: touch;
 }
 
-/* 3. Halaman Home & Bookkeeping (Mengizinkan scroll halaman jika konten meluber) */
 #page-home, #page-statis {
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
 }
 
-/* 4. Halaman Profile */
 .profile-header-card, .action-btn-row {
     flex-shrink: 0;
 }
@@ -112,7 +97,6 @@ html, body {
     -webkit-overflow-scrolling: touch;
 }
 
-/* --- SEMBUNYIKAN SCROLLBAR BAWAAN BROWSER AGAR RAPI --- */
 .products-list::-webkit-scrollbar,
 #cart-list-container::-webkit-scrollbar,
 .settings-list::-webkit-scrollbar,
@@ -126,7 +110,6 @@ html, body {
     scrollbar-width: none;
 }
 
-/* 1. Search Bar */
 .search-container {
     padding: 20px 15px 10px 15px;
     flex-shrink: 0 !important;
@@ -149,7 +132,6 @@ html, body {
     color: #999;
 }
 
-/* 2. Welcome Banner */
 .welcome-banner {
     background-color: #0F2E15;
     padding: 30px 20px;
@@ -163,11 +145,9 @@ html, body {
     color: #E3EED4;
     font-size: 32px;
     font-weight: 600;
-    /* text-decoration: underline; */
     letter-spacing: 1px;
 }
 
-/* 3. Grid Menu */
 .menu-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -212,7 +192,6 @@ html, body {
     color: #6B9071;
 }
 
-/* 4. Bottom Navigation */
 .bottom-nav {
     position: absolute;
     bottom: 0;
@@ -226,6 +205,11 @@ html, body {
     border-bottom-right-radius: 30px;
     z-index: 999;
 }
+
+.bottom-nav.hidden {
+    display: none !important;
+}
+
 .nav-item {
     display: flex;
     flex-direction: column;
@@ -243,7 +227,6 @@ html, body {
     color: #0F2E15;
 }
 
-/* 5. Profit Statistics */
 .stats-container {
     padding: 10px 15px 20px 15px;
 }
@@ -298,7 +281,6 @@ html, body {
     width: 30px;
 }
 
-/* Batang Grafiknya */
 .bar {
     width: 100%;
     background-color: #6B9071;
@@ -306,7 +288,6 @@ html, body {
     transition: height 0.5s ease-in-out;
 }
 
-/* Label xxxx di bawah batang */
 .bar-label {
     font-size: 10px;
     color: #666;
@@ -315,10 +296,6 @@ html, body {
     bottom: -15px;
 }
 
-
-
-/*INVENTORY
-/* Trik Mekanisme Pindah Halaman */
 .app-page {
     width: 100%;
     flex: 1; 
@@ -332,7 +309,6 @@ html, body {
     display: none;
 }
 
-/* Header Inventory */
 .inventory-header {
     padding: 30px 20px 10px 20px;
     flex-shrink: 0 !important;
@@ -348,7 +324,6 @@ html, body {
     margin-top: 4px;
 }
 
-/* Input Code/Name */
 .inventory-search {
     padding: 0 20px;
     margin-top: 15px;
@@ -364,7 +339,6 @@ html, body {
     background-color: white;
 }
 
-/* Banner Scan */
 .scan-banner {
     background-color: #E3EED4;
     border: 2px solid #6B9071;
@@ -387,7 +361,6 @@ html, body {
     font-weight: 600;
 }
 
-/* List Produk */
 .products-list {
     padding: 0 20px;
     display: flex;
@@ -436,7 +409,6 @@ html, body {
 }
 .badge-save { background-color: #0F2E15; }
 
-/* Tombol Edit di kanan */
 .btn-edit {
     position: absolute;
     right: 15px;
@@ -449,10 +421,8 @@ html, body {
     font-size: 14px;
 }
 
-/* Sifat teks rata tengah */
 .text-center { text-align: center; }
 
-/* CSS Halaman Scan */
 .scan-area-box {
     background-color: #E3EED4;
     margin: 15px;
@@ -481,7 +451,6 @@ html, body {
 .scan-big-target p { font-size: 16px; font-weight: bold; color: #0F2E15; }
 .scan-big-target small { font-size: 10px; color: #666; }
 
-/* CSS Halaman Statis / Bookkeeping */
 .time-filter-row {
     display: flex; justify-content: space-around; padding: 15px;
 }
@@ -499,7 +468,6 @@ html, body {
 .revenue-card span { font-size: 10px; color: #6B9071; font-weight: bold; display: flex; justify-content: space-between; }
 .revenue-card h2 { font-size: 14px; color: #0F2E15; margin-top: 5px; }
 
-/* CSS Halaman Profile */
 .profile-header-card {
     background-color: #0F2E15; margin: 15px; padding: 20px; border-radius: 20px; color: white;
     position: relative;
@@ -527,7 +495,6 @@ html, body {
 .sett-left i { background-color: #6B9071; padding: 6px; border-radius: 6px; color: #0F2E15; }
 .arrow-r { color: #0F2E15; font-size: 12px; }
 
-/* CONTAINER UTAMA BOX GRAFIK */
 .stats-container-statis {
     margin: 20px 15px;
     padding: 15px;
@@ -536,7 +503,6 @@ html, body {
     box-sizing: border-box;
 }
 
-/* JUDUL SALES STATISTICS */
 .stats-container-statis h2 {
     font-size: 16px;
     color: #0F2E15;
@@ -545,14 +511,12 @@ html, body {
     font-family: 'Josefin Sans', sans-serif;
 }
 
-/* WRAPPER COORD CHART (Angka + Grafik) */
 .line-chart-box {
     display: flex;
     gap: 10px;
     align-items: stretch;
 }
 
-/* PERBAIKAN GRAFIK JURUS FIX */
 .stats-container-statis {
     background-color: #E3EED4 !important;
     padding: 15px !important;
@@ -573,7 +537,7 @@ html, body {
     justify-content: space-between !important;
     align-items: flex-end !important;
     width: 35px !important;
-    height: 150px !important; /* Samakan presisi dengan tinggi SVG */
+    height: 150px !important;
     font-size: 11px !important;
     color: #112613 !important;
     font-weight: bold !important;
@@ -585,14 +549,12 @@ html, body {
     flex: 1 !important;
 }
 
-/* AREA TEMPAT SVG & SUMBU X */
 .chart-svg-area {
     flex: 1;
     display: flex;
     flex-direction: column;
 }
 
-/* GRAPHIC SVG NYA DIBIKIN RESPONSIVE */
 .chart-svg-area svg {
     width: 100%;
     height: 140px;
@@ -600,7 +562,6 @@ html, body {
     display: block;
 }
 
-/* LABEL SUMBU X (xxxx DI BAWAH) */
 .x-axis-statis {
     display: flex;
     justify-content: space-between;
@@ -618,7 +579,6 @@ html, body {
     flex: 1;
 }
 
-/* STYLING MODAL DATA */
 .modal {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
@@ -664,7 +624,6 @@ html, body {
     box-sizing: border-box;
 }
 
-/* Biar konten di bawah banner tetep punya jarak aman dari pinggir layar */
 #page-scan .scan-area-box,
 #page-scan .scan-main-section,
 #page-statis .time-filter-row,
@@ -674,7 +633,6 @@ html, body {
     margin-right: 15px !important;
 }
 
-/* Membuat Avatar dan Teks Nama sejajar ke samping */
 .profile-main-info {
     display: flex;
     align-items: center; 
@@ -682,7 +640,6 @@ html, body {
     margin-bottom: 12px;
 }
 
-/* Mengatur ulang teks nama dan username agar rapi */
 .profile-meta {
     display: flex;
     flex-direction: column;
@@ -702,7 +659,6 @@ html, body {
     color: #6B9071; 
 }
 
-/* Merapikan garis dekorasi agar melintang penuh di bawahnya */
 .line-deco {
     width: 100%;
     height: 3px;
@@ -711,46 +667,38 @@ html, body {
     border-radius: 2px;
 }
 
-/* --- 3. KENDALI SCROLL MANDIRI PER HALAMAN --- */
-
-/* PAGE HOME: Yang di-scroll bagian menu-grid dan statistik bawahnya */
 #page-home {
-    overflow-y: auto; /* Khusus home, karena isinya mengalir, biarkan mengalir tipis */
+    overflow-y: auto;
 }
 
-/* PAGE INVENTORY: Mengunci Header & Banner, hanya list barang yang scroll */
 .inventory-header, .inventory-search, .scan-banner {
-    flex-shrink: 0; /* Cegah header menyusut */
+    flex-shrink: 0; 
 }
 .products-list {
     flex: 1;
-    overflow-y: auto; /* Hanya list barang ini yang scroll */
+    overflow-y: auto;
 }
 
-/* PAGE CART (TRANSACTIONS): Mengunci area scan atas, hanya list keranjang yang scroll */
 .scan-main-section, .scan-area-box, .welcome-banner {
     flex-shrink: 0;
 }
 #cart-list-container {
     flex: 1;
-    overflow-y: auto; /* Hanya daftar belanjaan di keranjang yang scroll */
+    overflow-y: auto;
 }
 
-/* PAGE BOOKKEEPING: Mengunci angka revenue, hanya area chart & detail yang bisa scroll jika penuh */
 #page-statis {
     overflow-y: auto; 
 }
 
-/* PAGE PROFILE: Mengunci kartu nama atas, menu list bawah bisa di-scroll */
 .profile-header-card, .action-btn-row {
     flex-shrink: 0;
 }
 .settings-list {
     flex: 1;
-    overflow-y: auto; /* Hanya baris menu profile yang scroll */
+    overflow-y: auto; 
 }
 
-/* --- 4. BONUS: Sembunyikan Scrollbar biar Bersih ala Aplikasi Pro --- */
 .products-list::-webkit-scrollbar,
 #cart-list-container::-webkit-scrollbar,
 .settings-list::-webkit-scrollbar,
@@ -760,11 +708,10 @@ html, body {
 }
 
 .products-list, #cart-list-container, .settings-list, #page-home, #page-statis {
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
+    -ms-overflow-style: none;  
+    scrollbar-width: none;  
 }
 
-/* Beri jarak kanan-kiri khusus untuk konten di bawah banner */
 .search-container,
 .menu-grid,
 .stats-container,
@@ -778,18 +725,16 @@ html, body {
     padding-right: 15px !important;
 }
 
-/* Khusus untuk halaman Inventory yang ga pakai banner hijau, kasih padding penuh lagi */
 #page-list {
     padding: 15px 15px 75px 15px !important;
 }
 
-/* Biar video webcam laptop rapi di dalam banner */
 #camera-preview {
     width: 100%;
     border-radius: 10px;
     overflow: hidden;
     margin-top: 10px;
-    background-color: #000; /* Layar hitam pas kamera loading */
+    background-color: #000;
 }
 #camera-preview video {
     width: 100% !important;
@@ -803,4 +748,65 @@ html, body {
     height: 100% !important;
     object-fit: cover !important;
     border-radius: 18px;
+}
+
+.auth-container {
+    padding: 30px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 80vh;
+}
+
+.auth-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.auth-header h1 {
+    font-size: 28px;
+    color: #0F2E15;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.auth-header p {
+    font-size: 13px;
+    color: #6B9071;
+    margin-top: 5px;
+}
+
+.btn-auth {
+    width: 100%;
+    background-color: #0F2E15;
+    color: #FFFFFF;
+    border: none;
+    padding: 14px;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: background 0.3s ease;
+}
+
+.btn-auth:hover {
+    background-color: #174420;
+}
+
+.auth-footer {
+    text-align: center;
+    margin-top: 25px;
+    font-size: 13px;
+    color: #666;
+}
+
+.auth-footer a {
+    color: #6B9071;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.auth-footer a:hover {
+    text-decoration: underline;
 }
