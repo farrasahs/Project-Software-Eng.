@@ -14,7 +14,37 @@
 <body>
 
     <div class="app-container">
+        <div id="page-auth" class="app-page">
+    <div class="auth-container">
+        <div class="auth-header">
+            <h1 id="auth-title">SIGN IN</h1>
+            <p id="auth-subtitle">Welcome back! Please enter your details.</p>
+        </div>
 
+        <form id="form-auth">
+            <div class="form-group">
+                <label>Email Address</label>
+                <input type="email" id="auth-email" placeholder="user@gmail.com" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="auth-password" placeholder="••••••••" required>
+            </div>
+
+            <div class="form-group hidden" id="group-confirm-password">
+                <label>Confirm Password</label>
+                <input type="password" id="auth-confirm-password" placeholder="••••••••">
+            </div>
+
+            <button type="submit" class="btn-auth" id="btn-auth-submit">Sign In</button>
+        </form>
+
+        <div class="auth-footer">
+            <p id="auth-switch-text">Don't have an account? <a href="#" id="btn-switch-auth">Sign Up</a></p>
+        </div>
+    </div>
+</div> 
         <div id="page-home" class="app-page">
             <div class="search-container">
                 <div class="search-box">
@@ -210,9 +240,9 @@
                     <div class="avatar-circle">
                         <i class="fa-solid fa-user" style="font-size: 40px; color: #0F2E15;"></i>
                     </div>
-                    <div class="profile-meta">
-                        <h2>NAME</h2>
-                        <p>@username</p>
+                    <div class="profile-info">
+                        <h3 id="profile-name">Name</h3>
+                        <p id="profile-username">@username</p>
                     </div>
                 </div>
                 <div class="line-deco"></div>
@@ -242,6 +272,13 @@
             <div class="nav-item" onclick="navigasi('statis')"><i class="fa-solid fa-book"></i><span>BOOKKEEPING</span></div>
             <div class="nav-item" onclick="navigasi('profile')"><i class="fa-solid fa-user"></i><span>PROFILE</span></div>
         </div>
+        <div class="bottom-nav hidden">
+            <div class="nav-item active" onclick="navigasi('home')"><i class="fa-solid fa-house"></i><span>HOME</span></div>
+            <div class="nav-item" onclick="navigasi('list')"><i class="fa-solid fa-box"></i><span>INVENTORY</span></div>
+            <div class="nav-item" onclick="navigasi('scan')"><i class="fa-solid fa-cart-shopping"></i><span>CART</span></div>
+            <div class="nav-item" onclick="navigasi('statis')"><i class="fa-solid fa-book"></i><span>BOOKKEEPING</span></div>
+            <div class="nav-item" onclick="navigasi('profile')"><i class="fa-solid fa-user"></i><span>PROFILE</span></div>
+        </div>
     </div>
 
     <div id="modal-produk" class="modal hidden">
@@ -258,6 +295,13 @@
                     <select id="input-save">
                         <option value="Save">Save</option>
                         <option value="Draft">Draft</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="input-stok">Status Stock</label>
+                    <select id="input-stok" required>
+                        <option value="Available">Available</option>
+                        <option value="Empty">Empty</option>
                     </select>
                 </div>
                 <div class="form-group">
