@@ -148,10 +148,13 @@ function tampilkanDataInventory() {
 
     containerProduk.innerHTML = "";
 
+    // PERBAIKAN 1: Menghapus perulangan ganda yang bikin tampilan DOUBLE
     databaseProduk.forEach(produk => {
-        // Berikan fallback 'Available' jika properti stok belum ada di data tersebut
-        const statusStok = produk.stok || "Available";
-        const statusClass = statusStok === "Available" ? "badge-available" : "badge-empty";
+        // Ambil status asli dari data produk, jika benar-benar tidak ada baru beri fallback 'Available'
+        const statusStok = produk.stok !== undefined ? produk.stok : "Available";
+        
+        // Sesuaikan pengecekan class badge-nya (Mendukung pilihan "Available" atau "Kosong")
+        const statusClass = (statusStok === "Available" || statusStok === "Tersedia") ? "badge-available" : "badge-empty";
 
         const itemHTML = `
             <div class="product-item">
@@ -180,14 +183,17 @@ function tutupModalPilihan() {
     document.getElementById('modal-pilihan').classList.add('hidden');
 }
 
-// Cari event listener tombol edit pilihan lalu sesuaikan:
 document.getElementById('btn-pilihan-edit').addEventListener('click', function() {
     const produk = databaseProduk.find(p => p.id === idProdukTerpilih);
     if (produk) {
         document.getElementById('input-nama').value = produk.nama;
         document.getElementById('input-save').value = produk.save;
         
-        // Baris kode set value input-stok di sini SUDAH DIHAPUS
+        // Kembalikan status dari 'Available'/'Kosong' ke 'Yes'/'No' di dropdown HTML
+        const inputNoEl = document.getElementById('input-no');
+        if (inputNoEl) {
+            inputNoEl.value = (produk.stok === "Empty") ? "No" : "Yes";
+        }
         
         tutupModalPilihan();
         bukaModal(); 
@@ -216,8 +222,8 @@ function tutupModal() {
     idProdukTerpilih = null;
 }
 
+// Bagian scanner tetap aman, tidak ada perubahan di bawah ini
 document.addEventListener("DOMContentLoaded", function () {
-    
     const scanBanner = document.getElementById('scan-trigger');
     const bannerContent = document.getElementById('banner-status-content');
     const cameraPreview = document.getElementById('camera-preview');
@@ -265,7 +271,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
             if (!html5QrCodeCart) {
                 html5QrCodeCart = new Html5QrCode("camera-cart-preview");
-                
                 html5QrCodeCart.start(
                     { facingMode: "environment" }, 
                     { fps: 10, qrbox: { width: 200, height: 140 } },
@@ -301,38 +306,40 @@ window.onload = function() {
     navigasi('auth');
     tampilkanDataInventory();
     
-    const formProduk = document.getElementById('form-produk');
-    if (formProduk) {
-        // Di dalam fungsi Window Onload (Bagian submit form-produk)
-formProduk.addEventListener('submit', function(e) {
-    e.preventDefault();
+        const formProduk = document.getElementById('form-produk');
+        if (formProduk) {
+            formProduk.addEventListener('submit', function(e) {
+                e.preventDefault();
 
-    const namaVal = document.getElementById('input-nama').value;
-    const saveVal = document.getElementById('input-save').value;
-    
-    // Otomatis diset "Available" tanpa membaca dropdown HTML lagi
-    const stokVal = "Available"; 
+                const namaVal = document.getElementById('input-nama').value;
+                const saveVal = document.getElementById('input-save').value;
+        
+                // 1. Ambil value dari dropdown HTML kamu ('Yes' atau 'No')
+                const ketersediaan = document.getElementById('input-no').value; 
+        
+                // 2. Terjemahkan value 'Yes' -> 'Available', dan 'No' -> 'Kosong'
+                const stokVal = (ketersediaan === "Yes") ? "Available" : "Empty";
 
-    if (idProdukTerpilih) {
-        // Mode Update / Edit produk
-        databaseProduk = databaseProduk.map(p => {
-            if (p.id === idProdukTerpilih) {
-                // Tetap pertahankan status stok yang lama (atau default Available)
-                return { id: p.id, nama: namaVal, save: saveVal, stok: p.stok || "Available" };
-            }
-            return p;
-        });
-    } else {
-        // Mode Create / Input produk baru otomatis "Available"
-        const produkBaru = { id: Date.now(), nama: namaVal, save: saveVal, stok: stokVal };
-        databaseProduk.push(produkBaru);
-    }
+        if (idProdukTerpilih) {
+            // Mode Update / Edit produk
+            databaseProduk = databaseProduk.map(p => {
+                if (p.id === idProdukTerpilih) {
+                    return { id: p.id, nama: namaVal, save: saveVal, stok: stokVal };
+                }
+                return p;
+            });
+        } else {
+            // Mode Create / Input produk baru
+            const produkBaru = { id: Date.now(), nama: namaVal, save: saveVal, stok: stokVal };
+            databaseProduk.push(produkBaru);
+        }
 
-    localStorage.setItem('produk_umkm', JSON.stringify(databaseProduk));
-    
-    tutupModal();
-    alert("Produk berhasil disimpan!");
-    navigasi('list');
-});
-    }
-};
+        localStorage.setItem('produk_umkm', JSON.stringify(databaseProduk));
+        
+        tutupModal();
+        alert("Produk berhasil disimpan!");
+        tampilkanDataInventory(); // Biar list langsung refresh di layar
+        navigasi('list');
+    });
+}
+}
